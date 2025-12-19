@@ -1,17 +1,15 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getEntry, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import ProductGallery from '../../components/ProductGallery';
 
-export async function getStaticPaths() {
-  const annonces = await getCollection('annonces');
-  return annonces.map(annonce => ({
-    params: { slug: annonce.id },
-    props: { annonce },
-  }));
+const { slug } = Astro.params;
+const annonce = await getEntry('annonces', slug!);
+
+if (!annonce) {
+  return Astro.redirect('/404');
 }
 
-const { annonce } = Astro.props;
 const { Content } = await render(annonce);
 
 const seoTitle = `${annonce.data.titre} — Modélisme Ferroviaire Belgique`;
