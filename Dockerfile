@@ -14,13 +14,14 @@ FROM node:25-alpine AS production
 
 WORKDIR /app
 
-RUN npm install -g serve
-
 COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json ./
 
 ENV HOST=0.0.0.0
 ENV PORT=4323
+ENV NODE_ENV=production
 
 EXPOSE 4323
 
-CMD ["serve", "dist", "-l", "4323"]
+CMD ["node", "./dist/server/entry.mjs"]
