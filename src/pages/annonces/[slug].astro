@@ -1,10 +1,11 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import ProductGallery from '../../components/ProductGallery';
 
 const { slug } = Astro.params;
-const annonce = await getEntry('annonces', slug!);
+const allAnnonces = await getCollection('annonces');
+const annonce = allAnnonces.find(a => a.id === slug || a.id === `${slug}.mdoc` || a.id.replace(/\.mdoc$/, '') === slug);
 
 if (!annonce) {
   return Astro.redirect('/404');
