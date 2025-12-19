@@ -1,0 +1,144 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description = "Bourse de revente entre passionnés de modélisme ferroviaire en Belgique." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+		<!-- Snipcart -->
+		<link rel="preconnect" href="https://app.snipcart.com">
+		<link rel="preconnect" href="https://cdn.snipcart.com">
+		<link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.2.0/default/snipcart.css" />
+	</head>
+	<body class="font-sans">
+		<nav class="sticky top-0 z-40 bg-[#fcfcfc]/80 backdrop-blur-md border-b border-zinc-100">
+			<div class="max-w-7xl mx-auto px-8 h-20 flex justify-between items-center">
+				<a href="/" class="group flex flex-col">
+					<span class="text-sm font-bold tracking-[0.3em] uppercase transition-all group-hover:tracking-[0.35em]">Maquettes Train</span>
+					<span class="text-[10px] font-light text-zinc-400 uppercase tracking-widest -mt-1">Belgique • Archive</span>
+				</a>
+				<div class="flex items-center gap-8">
+					<!-- Desktop nav -->
+					<div class="hidden md:flex items-center gap-12 text-[10px] uppercase tracking-[0.2em] font-bold text-zinc-400">
+						<a href="/" class="hover:text-zinc-900 transition-colors py-2 border-b-2 border-transparent hover:border-zinc-900">Home</a>
+						<a href="/annonces" class="hover:text-zinc-900 transition-colors py-2 border-b-2 border-transparent hover:border-zinc-900 text-zinc-900">Catalogue</a>
+					</div>
+					<!-- Cart button (always visible) -->
+					<button class="snipcart-checkout relative hover:text-zinc-900 transition-colors py-2 flex items-center gap-2 text-zinc-400">
+						<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+						</svg>
+						<span class="snipcart-items-count text-[10px] font-bold"></span>
+					</button>
+					<!-- Burger button (mobile only) -->
+					<button id="burger-btn" class="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-1.5" aria-label="Menu">
+						<span class="burger-line w-6 h-0.5 bg-zinc-900 transition-all duration-300"></span>
+						<span class="burger-line w-6 h-0.5 bg-zinc-900 transition-all duration-300"></span>
+					</button>
+				</div>
+			</div>
+		</nav>
+		<!-- Mobile menu -->
+		<div id="mobile-menu" class="fixed inset-0 z-30 bg-[#fcfcfc] flex flex-col items-center justify-center gap-12 translate-x-full transition-transform duration-300 md:hidden">
+			<a href="/" class="text-2xl font-bold uppercase tracking-[0.3em] hover:text-zinc-500 transition-colors">Home</a>
+			<a href="/annonces" class="text-2xl font-bold uppercase tracking-[0.3em] hover:text-zinc-500 transition-colors">Catalogue</a>
+		</div>
+		<main>
+			<slot />
+		</main>
+		<footer class="mt-40 border-t border-zinc-100 bg-white">
+			<div class="max-w-7xl mx-auto px-8 py-24">
+				<div class="grid md:grid-cols-3 gap-20">
+					<div class="col-span-1 md:col-span-1">
+						<div class="text-sm font-bold tracking-[0.3em] uppercase mb-6">Maquettes Train</div>
+						<p class="text-xs text-zinc-400 leading-relaxed uppercase tracking-wider">
+							Une plateforme dédiée aux collectionneurs exigeants. Expertise technique et respect de l'histoire ferroviaire.
+						</p>
+					</div>
+					<div class="grid grid-cols-2 col-span-2 gap-10">
+						<div>
+							<h4 class="text-[10px] uppercase tracking-widest font-black text-zinc-300 mb-6">Navigation</h4>
+							<ul class="space-y-4 text-xs font-medium uppercase tracking-tighter">
+								<li><a href="/" class="hover:underline">Accueil</a></li>
+								<li><a href="/annonces" class="hover:underline">Catalogue complet</a></li>
+							</ul>
+						</div>
+						<div>
+							<h4 class="text-[10px] uppercase tracking-widest font-black text-zinc-300 mb-6">Contact</h4>
+							<ul class="space-y-4 text-xs font-medium uppercase tracking-tighter">
+								<li><span class="text-zinc-400">Localisation:</span> Belgique</li>
+								<li><a href="mailto:contact@trains-maquettes.be" class="hover:underline">Email Expertise</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="mt-20 pt-10 border-t border-zinc-50 flex flex-col md:flex-row justify-between items-center gap-6">
+					<p class="text-[10px] uppercase tracking-[0.2em] text-zinc-400 italic">© {new Date().getFullYear()} — Curated with precision.</p>
+					<div class="flex gap-8 text-[9px] uppercase tracking-widest font-bold">
+						<a href="#" class="text-zinc-300 hover:text-zinc-900">Instagram</a>
+						<a href="#" class="text-zinc-300 hover:text-zinc-900">Archives</a>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<!-- Snipcart -->
+		<script async src="https://cdn.snipcart.com/themes/v3.2.0/default/snipcart.js"></script>
+		<div hidden id="snipcart" data-api-key="YjE5Mjg1OWUtZTdmOS00NjVlLTlmOGMtZThmM2MwYjhkN2U1NjM5MDE3NDE2NzAzMzMzODIz" data-config-modal-style="side"></div>
+		<!-- Mobile menu script -->
+		<script>
+			const burgerBtn = document.getElementById('burger-btn');
+			const mobileMenu = document.getElementById('mobile-menu');
+			const burgerLines = document.querySelectorAll('.burger-line');
+			let isOpen = false;
+
+			burgerBtn?.addEventListener('click', () => {
+				isOpen = !isOpen;
+				if (isOpen) {
+					mobileMenu?.classList.remove('translate-x-full');
+					mobileMenu?.classList.add('translate-x-0');
+					burgerLines[0]?.classList.add('rotate-45', 'translate-y-1');
+					burgerLines[1]?.classList.add('-rotate-45', '-translate-y-1');
+				} else {
+					mobileMenu?.classList.add('translate-x-full');
+					mobileMenu?.classList.remove('translate-x-0');
+					burgerLines[0]?.classList.remove('rotate-45', 'translate-y-1');
+					burgerLines[1]?.classList.remove('-rotate-45', '-translate-y-1');
+				}
+			});
+		</script>
+		<!-- Lenis smooth scroll -->
+		<script>
+			import Lenis from 'lenis';
+
+			const lenis = new Lenis({
+				duration: 1.2,
+				easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+				orientation: 'vertical',
+				smoothWheel: true,
+			});
+
+			function raf(time: number) {
+				lenis.raf(time);
+				requestAnimationFrame(raf);
+			}
+
+			requestAnimationFrame(raf);
+		</script>
+	</body>
+</html>

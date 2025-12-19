@@ -1,0 +1,27 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import CatalogManager from '../../components/CatalogManager';
+
+const annonces = await getCollection('annonces');
+
+const title = "Le Catalogue — Archive Technique";
+const description = "Explorez notre sélection rigoureuse de locomotives et wagons miniatures.";
+---
+
+<Layout title={title} description={description}>
+	<div class="max-w-7xl mx-auto px-8 py-32">
+		<header class="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-12">
+			<div class="max-w-2xl">
+				<span class="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-300 mb-6 block">— Inventaire —</span>
+				<h1 class="text-6xl md:text-8xl font-sans font-black tracking-tightest uppercase">L'Archive.</h1>
+				<p class="text-zinc-500 text-lg mt-8 font-light leading-relaxed">
+					Chaque pièce listée ici a été inspectée, testée et documentée. Notre catalogue reflète l'histoire ferroviaire européenne à travers les échelles HO, N et Z.
+				</p>
+			</div>
+		</header>
+
+		{/* Gestionnaire de catalogue avec filtres interactifs */}
+		<CatalogManager client:load annonces={annonces} />
+	</div>
+</Layout>

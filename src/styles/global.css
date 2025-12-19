@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui;
+  --font-serif: 'Playfair Display', serif;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-[#fcfcfc] text-zinc-900 selection:bg-zinc-900 selection:text-white;
+    font-variant-ligatures: common-ligatures;
+  }
+}
+
+/* Typographie de précision */
+.tracking-tightest { letter-spacing: -0.05em; }
+.tracking-widest-xl { letter-spacing: 0.2em; }
+
+/* Effet de grain subtil pour le côté "expert/archive" */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  opacity: 0.02;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  z-index: 50;
+}
+
+/* Animations de transition */
+.fade-in {
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Styles Prose raffinés */
+.prose {
+  @apply max-w-none text-zinc-600;
+}
+.prose p { @apply mb-6 leading-[1.8]; }
+.prose h2 { @apply text-zinc-900 font-sans font-black uppercase tracking-widest text-sm mt-12 mb-6; }

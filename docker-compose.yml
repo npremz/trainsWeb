@@ -1,0 +1,11 @@
+services:
+  trains:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4323:4323"
+    restart: unless-stopped
+    environment:
+      - HOST=0.0.0.0
+      - PORT=4323

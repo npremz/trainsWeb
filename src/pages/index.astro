@@ -1,16 +1,83 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 
+const annonces = await getCollection('annonces');
+const latestAnnonces = annonces.slice(0, 3);
+
+const siteMetadata = {
+  title: "Maquettes Train Belgique — Excellence & Patrimoine Ferroviaire",
+  description: "Espace de revente expertisé pour collectionneurs de trains miniatures en Belgique."
+};
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title={siteMetadata.title} description={siteMetadata.description}>
+	<!-- HERO -->
+	<section class="max-w-7xl mx-auto px-8 py-32 md:py-48 flex flex-col items-center text-center fade-in">
+		<span class="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-400 mb-8">— Établi en Belgique —</span>
+		<h1 class="text-6xl md:text-9xl font-serif font-bold tracking-tightest leading-[0.9] mb-12">
+			La Passion <br/> <span class="italic text-zinc-300 font-normal">du Détail.</span>
+		</h1>
+		<p class="max-w-2xl text-lg md:text-xl text-zinc-500 font-light leading-relaxed mb-16">
+			Bienvenue dans un espace dédié à la transmission de pièces de collection. Ici, chaque train miniature a une histoire. Nous facilitons la revente entre passionnés exigeants.
+		</p>
+		<a href="/annonces" class="group flex flex-col items-center">
+			<span class="bg-zinc-900 text-white px-12 py-5 text-xs font-bold uppercase tracking-[0.3em] hover:bg-zinc-800 transition-all">Explorer l'Archive</span>
+			<span class="mt-4 text-[9px] uppercase tracking-widest text-zinc-400 group-hover:text-zinc-900 transition-colors">Découvrir le catalogue complet</span>
+		</a>
+	</section>
+
+	<!-- PHILOSOPHY GRID -->
+	<section class="border-y border-zinc-100 bg-white overflow-hidden">
+		<div class="grid md:grid-cols-2 divide-x divide-zinc-100">
+			<div class="p-12 md:p-24 space-y-8">
+				<span class="text-[10px] font-black uppercase tracking-widest text-zinc-300 italic">Expertise technique</span>
+				<h2 class="text-4xl md:text-5xl font-serif leading-tight">L'exigence du <br/> collectionneur.</h2>
+				<p class="text-zinc-500 leading-relaxed text-lg font-light">
+					Toutes les maquettes présentées font l'objet d'une description rigoureuse : état du moteur, présence de la boîte d'origine et fidélité historique.
+				</p>
+			</div>
+			<div class="p-12 md:p-24 space-y-8 bg-zinc-50/50">
+				<span class="text-[10px] font-black uppercase tracking-widest text-zinc-300 italic">Logistique sécurisée</span>
+				<h2 class="text-4xl md:text-5xl font-serif leading-tight">Expédition & <br/> Confiance.</h2>
+				<p class="text-zinc-500 leading-relaxed text-lg font-light">
+					Basés en Belgique, nous assurons des envois ultra-sécurisés via Bpost ou Mondial Relay. La remise en main propre est toujours notre priorité.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- LATEST ENTRIES -->
+	<section class="max-w-7xl mx-auto px-8 py-32">
+		<div class="flex flex-col md:flex-row justify-between items-baseline mb-24 gap-8">
+			<h2 class="text-5xl font-serif italic tracking-tight">Dernières Acquisitions</h2>
+			<a href="/annonces" class="text-xs font-black uppercase tracking-[0.3em] border-b-2 border-zinc-900 pb-1 hover:text-zinc-500 hover:border-zinc-300 transition-all">Voir tout le catalogue</a>
+		</div>
+
+		<div class="grid md:grid-cols-3 gap-16">
+			{latestAnnonces.map((annonce, index) => (
+				<a href={`/annonces/${annonce.id}`} class="group block fade-in" style={`animation-delay: ${index * 100}ms`}>
+					<div class="aspect-[3/4] bg-zinc-100 mb-8 overflow-hidden relative border border-zinc-100">
+						{annonce.data.images?.[0] ? (
+							<img src={annonce.data.images[0]} alt={annonce.data.titre} class="w-full h-full object-contain grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
+						) : (
+							<div class="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-widest text-zinc-300 italic font-bold">Image en Archive</div>
+						)}
+						<div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500"></div>
+					</div>
+					<div class="space-y-4">
+						<div class="flex justify-between items-baseline gap-4">
+							<h3 class="text-lg font-bold tracking-tight group-hover:text-zinc-500 transition-colors uppercase">{annonce.data.titre}</h3>
+							<span class="text-sm font-medium text-zinc-500">{annonce.data.prix}€</span>
+						</div>
+						<div class="flex gap-4 items-center">
+							<span class="text-[10px] font-black uppercase tracking-widest bg-zinc-900 text-white px-2 py-0.5">{annonce.data.echelle}</span>
+							<div class="h-[1px] flex-grow bg-zinc-100"></div>
+							<span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 italic">{annonce.data.etat}</span>
+						</div>
+					</div>
+				</a>
+			))}
+		</div>
+	</section>
+</Layout>

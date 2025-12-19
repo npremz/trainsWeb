@@ -1,0 +1,94 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import ProductGallery from '../../components/ProductGallery';
+
+export async function getStaticPaths() {
+  const annonces = await getCollection('annonces');
+  return annonces.map(annonce => ({
+    params: { slug: annonce.id },
+    props: { annonce },
+  }));
+}
+
+const { annonce } = Astro.props;
+const { Content } = await render(annonce);
+
+const seoTitle = `${annonce.data.titre} — Modélisme Ferroviaire Belgique`;
+const seoDesc = `Expertise technique : ${annonce.data.titre}. Échelle ${annonce.data.echelle}, état ${annonce.data.etat}.`;
+
+const labels: Record<string, Record<string, string>> = {
+    echelle: { 'HO': 'HO - 1/87', 'N': 'N - 1/160', 'Z': 'Z - 1/220', 'O': 'O - 1/45' },
+    systeme: { '2-rails-dc': '2 Rails - DC (Analogique)', '2-rails-dcc': '2 Rails - DCC (Digital)', '3-rails-ac': '3 Rails - AC (Märklin)' },
+    etat: { 'neuf': 'Neuf / Collection', 'excellent': 'Excellent / Peu roulé', 'bon': 'Bon état', 'restaurer': 'À restaurer' }
+};
+---
+
+<Layout title={seoTitle} description={seoDesc}>
+    <div class="max-w-7xl mx-auto px-8 py-24">
+        <nav class="mb-20">
+            <a href="/annonces" class="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-300 hover:text-zinc-900 transition-colors flex items-center gap-4">
+                <span class="text-lg">←</span> Retour au catalogue
+            </a>
+        </nav>
+
+        <div class="grid lg:grid-cols-12 gap-20">
+            <!-- GALERIE FONCTIONNELLE -->
+            <div class="lg:col-span-7">
+                <ProductGallery client:load images={annonce.data.images || []} titre={annonce.data.titre} />
+            </div>
+
+            <!-- INFOS -->
+            <div class="lg:col-span-5 space-y-12">
+                <header class="space-y-6">
+                    <span class="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-400">— Rapport d'Expertise —</span>
+                    <h1 class="text-4xl font-sans font-black tracking-tighter leading-tight uppercase">{annonce.data.titre}</h1>
+                    <div class="text-4xl font-sans font-medium tracking-tighter text-zinc-900">{annonce.data.prix}€</div>
+                </header>
+
+                <div class="grid grid-cols-1 gap-y-8 border-y border-zinc-100 py-10 font-sans">
+                    <div class="flex justify-between items-baseline">
+                        <span class="text-[10px] uppercase tracking-widest text-zinc-400 font-black">Échelle</span>
+                        <span class="font-bold text-sm tracking-tight">{labels.echelle[annonce.data.echelle]}</span>
+                    </div>
+                    <div class="flex justify-between items-baseline">
+                        <span class="text-[10px] uppercase tracking-widest text-zinc-400 font-black">Système</span>
+                        <span class="font-bold text-sm tracking-tight">{labels.systeme[annonce.data.systeme]}</span>
+                    </div>
+                    <div class="flex justify-between items-baseline">
+                        <span class="text-[10px] uppercase tracking-widest text-zinc-400 font-black">État</span>
+                        <span class="font-bold text-sm tracking-tight italic">{labels.etat[annonce.data.etat]}</span>
+                    </div>
+                </div>
+
+                <div class="prose prose-zinc">
+                    <h2 class="text-[10px] uppercase tracking-[0.3em] text-zinc-400 mb-6 font-black border-none not-italic font-sans">Commentaires Techniques</h2>
+                    <div class="font-sans text-sm leading-relaxed">
+                        <Content />
+                    </div>
+                </div>
+
+                <div class="pt-10">
+                    <button
+                        class="snipcart-add-item w-full bg-zinc-900 text-white py-6 px-8 text-xs font-black uppercase tracking-[0.4em] hover:bg-zinc-800 transition-all shadow-xl shadow-zinc-200"
+                        data-item-id={annonce.id}
+                        data-item-name={annonce.data.titre}
+                        data-item-price={annonce.data.prix}
+                        data-item-url={`/annonces/${annonce.id}`}
+                        data-item-description={`Échelle ${annonce.data.echelle} • ${labels.etat[annonce.data.etat]}`}
+                        data-item-image={annonce.data.images?.[0] || ''}
+                        data-item-quantity="1"
+                        data-item-max-quantity="1"
+                    >
+                        Acquérir cette pièce
+                    </button>
+                    <div class="mt-8 p-6 bg-zinc-50 border border-zinc-100">
+                        <p class="text-[10px] text-zinc-400 leading-relaxed uppercase tracking-wider font-bold">
+                            Expédition hautement sécurisée (Belgique & Europe). <br/> Assurance incluse. Remise en main propre possible sur rendez-vous.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>
